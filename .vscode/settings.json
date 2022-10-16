@@ -3,7 +3,12 @@
     "intelephense.diagnostics.undefinedClassConstants": true,
     "intelephense.diagnostics.undefinedFunctions": false,
     "cSpell.words": [
-        "adsbygoogle",
-        "Adsense"
-    ]
+        "codesyntaxhighlight",
+        "highlightjs",
+        "nowiki",
+        "parserhook",
+        "syntaxhighlight",
+        "unstrip"
+    ],
+    "intelephense.diagnostics.undefinedTypes": false
 }

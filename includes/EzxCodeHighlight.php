@@ -71,6 +71,7 @@ class EzxCodeHighlight {
 			// 태그를 보호하는 구문이 여기에 있어야 할 듯.
 
 			if ( $parser ) {
+				// 이 부분은 아직 잘 이해가 안 감.
 				// Use 'nowiki' strip marker to prevent list processing (also known as doBlockLevels()).
 				// However, leave the wrapping <div/> outside to prevent <p/>-wrapping.
 				$marker = $parser::MARKER_PREFIX . '-codesyntaxhighlight-' .

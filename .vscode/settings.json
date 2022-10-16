@@ -1,0 +1,9 @@
+{
+    "intelephense.diagnostics.undefinedConstants": false,
+    "intelephense.diagnostics.undefinedClassConstants": true,
+    "intelephense.diagnostics.undefinedFunctions": false,
+    "cSpell.words": [
+        "adsbygoogle",
+        "Adsense"
+    ]
+}

@@ -30,6 +30,12 @@ class EzxCodeHighlight {
 		// Replace strip markers (For e.g. {{#tag:syntaxhighlight|<nowiki>...}})
 		$output = $parser->getStripState()->unstripNoWiki( $text ?? '' );
 
+		// Don't trim leading spaces away, just the linefeeds
+		$output = preg_replace( '/^\n+/', '', rtrim( $output ) );
+		$output = htmlspecialchars($output);
+
+		$lang = $args['lang'] ?? '';
+
 		$isInline = isset( $args['inline'] );
 
 		// Allow certain HTML attributes
@@ -41,6 +47,9 @@ class EzxCodeHighlight {
 		$classList = [];
 		if ( isset( $htmlAttribs['class'] ) ) {
 			$classList[] = $htmlAttribs['class'];
+		}
+		if ( !empty($lang) ){
+			$classList[] = 'language-'.$lang;
 		}
 
 		$htmlAttribs['class'] = implode( ' ', $classList );

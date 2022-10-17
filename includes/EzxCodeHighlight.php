@@ -4,15 +4,21 @@
  *
  * @file
  */
+use Html;
+use Parser;
+use Sanitizer;
 
 class EzxCodeHighlight {
 	// 설정값을 갖게 되는 멤버 변수
 	private static $config;
+	const TYPE_PRISM_JS = 'prismjs';
+	const TYPE_HIGHLIGHT_JS = 'highlightjs';
 
 	/**
+	 * 'onParserFirstCallInit' 훅의 진입점
+	 * 
 	 * 참고
 	 * https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
-	 * 
 	 */
 	public static function onParserFirstCallInit( Parser $parser ){
 		// $parser->setHook( $tag, callable $callback )
@@ -28,20 +34,22 @@ class EzxCodeHighlight {
 	 */
 	public static function parserHook( $text, array $args, Parser $parser, PPFrame $frame ){
 		// Replace strip markers (For e.g. {{#tag:syntaxhighlight|<nowiki>...}})
-		$output = $parser->getStripState()->unstripNoWiki( $text ?? '' );
+		$text = $parser->getStripState()->unstripNoWiki( $text ?? '' );
 
-		// Don't trim leading spaces away, just the linefeeds
-		$output = preg_replace( '/^\n+/', '', rtrim( $output ) );
-		$output = htmlspecialchars($output);
+		// 해당하는 내용의 특수문자 처리 및 attributes 확인
+		$result = self::processContent($text, $args);
 
-		$lang = $args['lang'] ?? '';
+		// 소스 문자열
+		$output = $result['output'] ?? '';
 
-		$isInline = isset( $args['inline'] );
+		// 설정된 소스 언어
+		$lang = $result['lang'] ?? '';
 
-		// Allow certain HTML attributes
-		$htmlAttribs = Sanitizer::validateAttributes(
-			$args, array_flip( [ 'style', 'class', 'id' ] )
-		);
+		// inline 속성 여부
+		$isInline = $result['inline'] ?? false;
+
+		// style, class, id 속성값
+		$htmlAttribs = $result['attrib'] ?? [];
 
 		// Build class list
 		$classList = [];
@@ -51,20 +59,12 @@ class EzxCodeHighlight {
 		if ( !empty($lang) ){
 			$classList[] = 'language-'.$lang;
 		}
-
 		$htmlAttribs['class'] = implode( ' ', $classList );
 
 		// 
 		if ( $isInline ) {
-			// We've already trimmed the input $code before highlighting,
-			// but pygment's standard out adds a line break afterwards,
-			// which would then be preserved in the paragraph that wraps this,
-			// and become visible as a space. Avoid that.
-			$output = trim( $output );
-
 			// Enforce inlineness. Stray newlines may result in unexpected list and paragraph processing
 			// (also known as doBlockLevels()).
-			$output = str_replace( "\n", ' ', $output );
 			$output = Html::rawElement( 'code', $htmlAttribs, $output );
 		} else {
 			// $output = self::unwrap( $output );
@@ -84,7 +84,6 @@ class EzxCodeHighlight {
 			$output .
 			Html::closeElement( 'code' );
 
-
 			$output = Html::openElement( 'pre' ) .
 				$output .
 				Html::closeElement( 'pre' );
@@ -94,6 +93,46 @@ class EzxCodeHighlight {
 				Html::closeElement( 'div' );
 		}
 		return $output;
+	}
+
+	/**
+	 * 
+	 * 참고
+	 * https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi/blob/master/includes/SyntaxHighlight.php
+	 */
+	public static function processContent( $text, array $args){
+		// 앞부분 \n 값 삭제 및, 뒷 부분 공백 삭제
+		$output = preg_replace( '/^\n+/', '', rtrim( $text ) );
+
+		// 특수문자(<> 등)를 HTML entities로 치환.
+		$output = htmlspecialchars($output);
+
+		$lang = $args['lang'] ?? '';
+
+		// inline 타입인지
+		$isInline = isset( $args['inline'] );
+
+		// Allow certain HTML attributes
+		// style, class, id 속성값이 있을 경우 나눠서 담음.
+		$htmlAttribs = Sanitizer::validateAttributes(
+			$args, array_flip( [ 'style', 'class', 'id' ] )
+		);
+
+		// 
+		if ( $isInline ) {
+			// inline 형태일 때, 앞부분의 공백도 제거.
+			$output = trim( $output );
+			
+			// 중간의 \n도 제거.
+			$output = str_replace( "\n", ' ', $output );
+		}
+
+		return [
+			'output' => $output,
+			'lang' => $lang,
+			'inline' => $isInline,
+			'attrib' => $htmlAttribs
+		];
 	}
 
 	/**
@@ -117,9 +156,13 @@ class EzxCodeHighlight {
 		* DisallowedIPs : 애드센스를 보여주지 않을 IP 목록.
 		*/
 		$config = [
-			'Type' => 'highlightjs',
-			'Debug' => false
+			'type' => self::TYPE_HIGHLIGHT_JS,
+			'debug' => false
 		];
+
+		if($wgCodeHighlight['type'] != self::TYPE_HIGHLIGHT_JS && $wgCodeHighlight['type'] != self::TYPE_PRISM_JS){
+			unset($wgCodeHighlight['type']);
+		}
 		
 		# 설정값 병합
 		if (isset($wgCodeHighlight)){

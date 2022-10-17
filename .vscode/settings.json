@@ -7,6 +7,7 @@
         "highlightjs",
         "nowiki",
         "parserhook",
+        "prismjs",
         "syntaxhighlight",
         "unstrip"
     ],

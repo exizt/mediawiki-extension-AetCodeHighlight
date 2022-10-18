@@ -1,5 +1,5 @@
 {
-    "name": "CodeHighlight",
+    "name": "AetCodeHighlight",
     "version": "1.0.0",
     "author": "[https://github.com/exizt exizt]",
     "url": "https://github.com/exizt/mw-ext-codehighlight",
@@ -10,15 +10,15 @@
         "MediaWiki": ">= 1.35.0"
     },
     "AutoloadClasses": {
-        "EzxCodeHighlight": "src/EzxCodeHighlight.php"
+        "AetCodeHighlight": "src/AetCodeHighlight.php"
     },
     "Hooks": {
-        "BeforePageDisplay": "EzxCodeHighlight::onBeforePageDisplay",
-        "ParserFirstCallInit": "EzxCodeHighlight::onParserFirstCallInit"
+        "BeforePageDisplay": "AetCodeHighlight::onBeforePageDisplay",
+        "ParserFirstCallInit": "AetCodeHighlight::onParserFirstCallInit"
     },
     "ResourceFileModulePaths": {
         "localBasePath": "",
-        "remoteExtPath": "CodeHighlight"
+        "remoteExtPath": "AetCodeHighlight"
     },
     "ResourceModules": {
         "ext.CodeHighlight": {

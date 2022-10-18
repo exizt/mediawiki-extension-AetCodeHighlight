@@ -8,7 +8,7 @@ use Html;
 use Parser;
 use Sanitizer;
 
-class EzxCodeHighlight {
+class AetCodeHighlight {
 	// 설정값을 갖게 되는 멤버 변수
 	private static $config;
 	const TYPE_PRISM_JS = 'prismjs';
@@ -149,16 +149,13 @@ class EzxCodeHighlight {
 			return self::$config;
 		}
 		self::debugLog('::getConfiguration');
-		global $wgCodeHighlight;
+		$wgCodeHighlight = self::getLocalSettings();
 
 		/*
 		* 설정 기본값
 		* 
 		* type : 'highlightjs', 'prismjs'
 		* theme : 테마
-		* SlotIdContentBottom : 콘텐츠 히단에 표시할 애드센스 광고 단위 아이디 (예: xxxxxxx)
-		* AnonOnly : '비회원'만 애드센스 노출하기.
-		* DisallowedIPs : 애드센스를 보여주지 않을 IP 목록.
 		*/
 		$config = [
 			'type' => self::TYPE_HIGHLIGHT_JS,
@@ -179,6 +176,10 @@ class EzxCodeHighlight {
 		return $config;
 	}
 
+	private static function getLocalSettings(){
+		global $wgCodeHighlight;
+		return $wgCodeHighlight;
+	}
 	/**
 	 * 옵션이 지정되어있는지 여부
 	 * 
@@ -216,7 +217,7 @@ class EzxCodeHighlight {
 
 		// 로깅
 		if($isDebug){
-			$debugTag = 'EzxCodeHighlight';
+			$debugTag = 'AetCodeHighlight';
 			if(is_string($msg)){
 				wfDebugLog($debugTag, $msg);
 			} else if(is_object($msg) || is_array($msg)){

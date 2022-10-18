@@ -1,0 +1,10 @@
+div.mw-ext-codehighlight pre{
+    background-color: inherit;
+    border: 0;
+    padding: 0;
+    font-size: 16px;
+}
+div.mw-ext-codehighlight pre code{
+    border: 0;
+    border-radius: inherit;
+}

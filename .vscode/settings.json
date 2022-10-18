@@ -3,6 +3,7 @@
     "intelephense.diagnostics.undefinedClassConstants": true,
     "intelephense.diagnostics.undefinedFunctions": false,
     "cSpell.words": [
+        "codehighlight",
         "codesyntaxhighlight",
         "highlightjs",
         "nowiki",

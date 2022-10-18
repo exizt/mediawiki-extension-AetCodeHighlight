@@ -26,6 +26,11 @@ class EzxCodeHighlight {
 		$parser->setHook('syntaxhighlight', [self::class, 'parserHook']);
 	}
 
+	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ){
+		$modules[] = 'ext.CodeHighlight';
+		$out->addModules( $modules );
+	}
+
 	/**
 	 * 
 	 * 참고
@@ -88,7 +93,7 @@ class EzxCodeHighlight {
 				$output .
 				Html::closeElement( 'pre' );
 
-			$output = Html::openElement( 'div' ) .
+			$output = Html::openElement( 'div' , ['class'=>'mw-ext-codehighlight']) .
 				$output .
 				Html::closeElement( 'div' );
 		}

@@ -10,10 +10,25 @@
         "MediaWiki": ">= 1.35.0"
     },
     "AutoloadClasses": {
-        "EzxCodeHighlight": "includes/EzxCodeHighlight.php"
+        "EzxCodeHighlight": "src/EzxCodeHighlight.php"
     },
     "Hooks": {
+        "BeforePageDisplay": "EzxCodeHighlight::onBeforePageDisplay",
         "ParserFirstCallInit": "EzxCodeHighlight::onParserFirstCallInit"
+    },
+    "ResourceFileModulePaths": {
+        "localBasePath": "",
+        "remoteExtPath": "CodeHighlight"
+    },
+    "ResourceModules": {
+        "ext.CodeHighlight": {
+            "scripts": [
+                "resources/common.js"
+            ],
+            "styles": [
+                "resources/code-reset.css"
+            ]
+        }
     },
     "manifest_version": 2
 }

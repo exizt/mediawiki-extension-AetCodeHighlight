@@ -44,7 +44,7 @@
 
         onLoadCodeHighlight();
         function onLoadCodeHighlight(){
-            console.log('ccccc')
+            // console.log('ccccc')
 
 
             var check = document.querySelector('body.action-view') !== null;
@@ -62,7 +62,7 @@
                 return
             }
     
-            console.log('ccccc2')
+            console.log('AetCodeHighlight::highlightAll')
 
             hljs.highlightAll();
         }

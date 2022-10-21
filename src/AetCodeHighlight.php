@@ -149,7 +149,7 @@ class AetCodeHighlight {
 			return self::$config;
 		}
 		self::debugLog('::getConfiguration');
-		$wgCodeHighlight = self::getLocalSettings();
+		$wgCodeHighlight = self::getCustomSettings();
 
 		/*
 		* 설정 기본값
@@ -176,7 +176,7 @@ class AetCodeHighlight {
 		return $config;
 	}
 
-	private static function getLocalSettings(){
+	private static function getCustomSettings(){
 		global $wgCodeHighlight;
 		return $wgCodeHighlight;
 	}

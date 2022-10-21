@@ -10,3 +10,8 @@
 # 설정
 
 ## 옵션
+- `$wgCodeHighlight['type']`
+    - 구문 강조 기능 중 선택. 
+        - value : `'highlightjs'` or `'prismjs'`
+        - default : `'highlightjs'`
+

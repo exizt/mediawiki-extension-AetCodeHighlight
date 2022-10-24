@@ -149,7 +149,7 @@ class AetCodeHighlight {
 			return self::$config;
 		}
 		self::debugLog('::getConfiguration');
-		$wgCodeHighlight = self::getCustomSettings();
+		$wgCodeHighlight = self::getUserSettings();
 
 		/*
 		* 설정 기본값
@@ -176,24 +176,9 @@ class AetCodeHighlight {
 		return $config;
 	}
 
-	private static function getCustomSettings(){
+	private static function getUserSettings(){
 		global $wgCodeHighlight;
 		return $wgCodeHighlight;
-	}
-	/**
-	 * 옵션이 지정되어있는지 여부
-	 * 
-	 * @return boolean false (지정되지 않았음) /true(지정되어 있음)
-	 */
-	private static function isOptionSet($config, $name){
-		if( !isset($config[$name]) ){
-			return false;
-		}
-		if($config[$name] === '' || $config[$name] === 'none'
-		 || $config[$name] === false || $config[$name] === NULL){
-			return false;
-		}
-		return true;
 	}
 
 	/**

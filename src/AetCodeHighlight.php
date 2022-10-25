@@ -154,27 +154,29 @@ class AetCodeHighlight {
 			return self::$config;
 		}
 		self::debugLog('::getConfiguration');
-		$wgCodeHighlight = self::getUserLocalSettings();
-
+		
 		/*
 		* 설정 기본값
 		* 
 		* type : 'highlightjs', 'prismjs'
 		* theme : 테마
 		*/
-		$config = [
+		$defaultConfig = [
 			'type' => self::TYPE_HIGHLIGHT_JS,
+			'lazy' => false,
 			'debug' => false
 		];
-
-		if($wgCodeHighlight['type'] != self::TYPE_HIGHLIGHT_JS && $wgCodeHighlight['type'] != self::TYPE_PRISM_JS){
-			unset($wgCodeHighlight['type']);
-		}
 		
 		# 설정값 병합
-		if (isset($wgCodeHighlight)){
+		$config = self::getUserLocalSettings();
+		if (isset($config)){
+			if($config['type'] != self::TYPE_HIGHLIGHT_JS && $config['type'] != self::TYPE_PRISM_JS){
+				unset($config['type']);
+			}
 			self::debugLog('isset $wgCodeHighlight');
-			$config = array_merge($config, $wgCodeHighlight);
+			$config = array_merge($defaultConfig, $config);
+		} else {
+			$config = $defaultConfig;
 		}
 
 		self::$config = $config;

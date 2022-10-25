@@ -149,7 +149,7 @@ class AetCodeHighlight {
 			return self::$config;
 		}
 		self::debugLog('::getConfiguration');
-		$wgCodeHighlight = self::getUserSettings();
+		$wgCodeHighlight = self::getUserLocalSettings();
 
 		/*
 		* 설정 기본값
@@ -176,7 +176,10 @@ class AetCodeHighlight {
 		return $config;
 	}
 
-	private static function getUserSettings(){
+	/**
+	 * 설정값 조회
+	 */
+	private static function getUserLocalSettings(){
 		global $wgCodeHighlight;
 		return $wgCodeHighlight;
 	}
@@ -185,30 +188,22 @@ class AetCodeHighlight {
 	 * 디버그 로깅 관련
 	 */
 	private static function debugLog($msg){
-		global $wgDebugToolbar, $wgCodeHighlight;
+		global $wgDebugToolbar;
 
 		# 디버그툴바 사용중일 때만 허용.
 		$useDebugToolbar = $wgDebugToolbar ?? false;
 		if( !$useDebugToolbar ){
 			return false;
 		}
-
-		// 디버깅 여부
-		if(is_array(self::$config)){
-			$isDebug = self::$config['Debug'];
-		} else {
-			$isDebug = $wgCodeHighlight['Debug'] ?? false;
-		}
-
-		// 로깅
+		
+		# 로깅
+		$userSettings = self::getUserLocalSettings();
+		$isDebug = $userSettings['debug'] ?? false;
 		if($isDebug){
-			$debugTag = 'AetCodeHighlight';
 			if(is_string($msg)){
-				wfDebugLog($debugTag, $msg);
-			} else if(is_object($msg) || is_array($msg)){
-				wfDebugLog($debugTag, json_encode($msg));
+				wfDebugLog(static::class, $msg);
 			} else {
-				wfDebugLog($debugTag, json_encode($msg));
+				wfDebugLog(static::class, json_encode($msg));
 			}
 		} else {
 			return false;

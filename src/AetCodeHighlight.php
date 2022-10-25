@@ -10,7 +10,12 @@ use Sanitizer;
 
 class AetCodeHighlight {
 	# 설정값을 갖게 되는 멤버 변수
-	private static $config;
+	private static $config = null;
+
+	# 이용 가능한지 여부 (isAvailable 메소드에서 체크함)
+	private static $_isAvailable = true;
+	
+	# 상수들
 	const TYPE_PRISM_JS = 'prismjs';
 	const TYPE_HIGHLIGHT_JS = 'highlightjs';
 

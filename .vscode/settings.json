@@ -9,6 +9,7 @@
         "nowiki",
         "parserhook",
         "prismjs",
+        "scode",
         "syntaxhighlight",
         "unstrip"
     ],

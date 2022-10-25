@@ -27,7 +27,9 @@ class AetCodeHighlight {
 	 */
 	public static function onParserFirstCallInit( Parser $parser ){
 		// $parser->setHook( $tag, callable $callback )
+		// self::debugLog('onParserFirstCallInit');
 		$parser->setHook('source', [self::class, 'parserHook']);
+		$parser->setHook('scode', [self::class, 'parserHook']);
 		$parser->setHook('syntaxhighlight', [self::class, 'parserHook']);
 	}
 

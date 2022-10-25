@@ -31,11 +31,6 @@ class AetCodeHighlight {
 		$parser->setHook('syntaxhighlight', [self::class, 'parserHook']);
 	}
 
-	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ){
-		$modules[] = 'ext.CodeHighlight';
-		$out->addModules( $modules );
-	}
-
 	/**
 	 * 
 	 * 참고
@@ -43,6 +38,11 @@ class AetCodeHighlight {
 	 * https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi/blob/master/includes/SyntaxHighlight.php
 	 */
 	public static function parserHook( $text, array $args, Parser $parser, PPFrame $frame ){
+		self::debugLog('parserHook');
+
+		# 설정값 조회
+		$config = self::getConfiguration();
+
 		// Replace strip markers (For e.g. {{#tag:syntaxhighlight|<nowiki>...}})
 		$text = $parser->getStripState()->unstripNoWiki( $text ?? '' );
 
@@ -98,11 +98,63 @@ class AetCodeHighlight {
 				$output .
 				Html::closeElement( 'pre' );
 
-			$output = Html::openElement( 'div' , ['class'=>'mw-ext-codehighlight']) .
+			$wrapDivClassList = ['mw-ext-codehighlight'];
+			if(self::isPrismJS($config)){
+				$wrapDivClassList[] = 'mw-ext-codehighlight-prismjs';
+			} elseif(self::isHighlightJS($config)){
+				$wrapDivClassList[] = 'mw-ext-codehighlight-highlightjs';
+			}
+			$wrapDivClass = implode(' ', $wrapDivClassList);
+			
+
+			$output = Html::openElement( 'div' , ['class' => $wrapDivClass]) .
 				$output .
 				Html::closeElement( 'div' );
 		}
+
+		# 모듈 또는 cdn 처리
+		# ParserOutput
+		$parserOutput = $parser->getOutput();
+		if( $config['lazy'] ){
+			$modules[] = 'ext.CodeHighlight';
+			$parserOutput->addModules( $modules );
+		} else {
+			if ( $config['type'] == self::TYPE_PRISM_JS ){
+				$html = self::makePrismJsHTML();
+			} else {
+				$html = self::makeHighlightJsHTML();
+			}
+			$parserOutput->addHeadItem($html, 'aet-codehighlight');
+			$parserOutput->addModuleStyles( ['ext.CodeHighlight.styles'] );
+		}
+
 		return $output;
+	}
+
+	/**
+	 * `Highlight.js`를 호출하는 HTML 태그
+	 * @see https://highlightjs.org/usage/
+	 */
+	private static function makeHighlightJsHTML(){
+		$html = <<<EOT
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/atom-one-dark.min.css" integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" integrity="sha512-gU7kztaQEl7SHJyraPfZLQCNnrKdaQi5ndOyt4L4UPL/FHDd/uB9Je6KDARIqwnNNE27hnqoWLBq+Kpe4iHfeQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script>hljs.highlightAll();</script>
+		EOT;
+		return $html;
+	}
+
+	/**
+	 * `Prism.js`를 호출하는 HTML 태그
+	 * @see https://prismjs.com/
+	 * @see https://cdnjs.com/libraries/prism
+	 */
+	private static function makePrismJsHTML(){
+		$html = <<<EOT
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		EOT;
+		return $html;
 	}
 
 	/**
@@ -143,6 +195,21 @@ class AetCodeHighlight {
 			'inline' => $isInline,
 			'attrib' => $htmlAttribs
 		];
+	}
+
+	private static function isHighlightJS($config) {
+		return $config['type'] == self::TYPE_HIGHLIGHT_JS;
+	}
+
+	private static function isPrismJS($config){
+		return $config['type'] == self::TYPE_PRISM_JS;
+	}
+
+	/**
+	 * '사용 안 함'을 설정.
+	 */
+	private static function setDisabled(){
+		self::$_isAvailable = false;
 	}
 
 	/**

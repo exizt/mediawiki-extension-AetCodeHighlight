@@ -13,7 +13,6 @@
         "AetCodeHighlight": "src/AetCodeHighlight.php"
     },
     "Hooks": {
-        "BeforePageDisplay": "AetCodeHighlight::onBeforePageDisplay",
         "ParserFirstCallInit": "AetCodeHighlight::onParserFirstCallInit"
     },
     "ResourceFileModulePaths": {
@@ -25,6 +24,11 @@
             "scripts": [
                 "resources/common.js"
             ],
+            "styles": [
+                "resources/code-reset.css"
+            ]
+        },
+        "ext.CodeHighlight.styles": {
             "styles": [
                 "resources/code-reset.css"
             ]

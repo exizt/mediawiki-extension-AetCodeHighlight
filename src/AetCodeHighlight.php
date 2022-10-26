@@ -219,7 +219,7 @@ class AetCodeHighlight {
 	 */
 	public static function getConfiguration(){
 		# 한 번 로드했다면, 그 후에는 로드하지 않도록 처리.
-		if(is_array(self::$config)){
+		if( !is_null(self::$config) ){
 			return self::$config;
 		}
 		self::debugLog('::getConfiguration');
@@ -230,22 +230,30 @@ class AetCodeHighlight {
 		* type : 'highlightjs', 'prismjs'
 		* theme : 테마
 		*/
-		$defaultConfig = [
+		$config = [
 			'type' => self::TYPE_HIGHLIGHT_JS,
 			'lazy' => false,
 			'debug' => false
 		];
 		
 		# 설정값 병합
-		$config = self::getUserLocalSettings();
-		if (isset($config)){
-			if($config['type'] != self::TYPE_HIGHLIGHT_JS && $config['type'] != self::TYPE_PRISM_JS){
-				unset($config['type']);
+		$userSettings = self::getUserLocalSettings();
+		if (isset($userSettings)){
+			if( isset($userSettings['type']) ){
+				if($userSettings['type'] != self::TYPE_HIGHLIGHT_JS && $userSettings['type'] != self::TYPE_PRISM_JS){
+					unset($userSettings['type']);
+				}
 			}
-			self::debugLog('isset $wgCodeHighlight');
-			$config = array_merge($defaultConfig, $config);
-		} else {
-			$config = $defaultConfig;
+			# 만약을 위한 설정값 타입 체크.
+			foreach ($userSettings as $key => $value) {
+				if( array_key_exists($key, $config) ) {
+					if( gettype($config[$key]) == gettype($value) ){
+						$config[$key] = $value;
+					} else {
+						self::debugLog($key.'옵션값이 잘못되었습니다.');
+					}
+				}
+			}
 		}
 
 		self::$config = $config;

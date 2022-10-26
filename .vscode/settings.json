@@ -2,6 +2,7 @@
     "intelephense.diagnostics.undefinedConstants": false,
     "intelephense.diagnostics.undefinedClassConstants": true,
     "intelephense.diagnostics.undefinedFunctions": false,
+    "intelephense.diagnostics.undefinedTypes": false,
     "cSpell.words": [
         "codehighlight",
         "codesyntaxhighlight",
@@ -12,6 +13,5 @@
         "scode",
         "syntaxhighlight",
         "unstrip"
-    ],
-    "intelephense.diagnostics.undefinedTypes": false
+    ]
 }

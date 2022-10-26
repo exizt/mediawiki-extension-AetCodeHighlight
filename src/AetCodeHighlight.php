@@ -265,8 +265,8 @@ class AetCodeHighlight {
 	 * 설정값 조회
 	 */
 	private static function getUserLocalSettings(){
-		global $wgCodeHighlight;
-		return $wgCodeHighlight;
+		global $wgAetCodeHighlight;
+		return $wgAetCodeHighlight;
 	}
 
 	/**

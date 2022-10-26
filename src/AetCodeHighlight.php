@@ -256,6 +256,7 @@ class AetCodeHighlight {
 			}
 		}
 
+		self::debugLog($config);
 		self::$config = $config;
 		return $config;
 	}

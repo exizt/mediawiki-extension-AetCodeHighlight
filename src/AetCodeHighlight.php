@@ -11,9 +11,6 @@ use Sanitizer;
 class AetCodeHighlight {
 	# 설정값을 갖게 되는 멤버 변수
 	private static $config = null;
-
-	# 이용 가능한지 여부 (isAvailable 메소드에서 체크함)
-	private static $_isAvailable = true;
 	
 	# 상수들
 	const TYPE_PRISM_JS = 'prismjs';
@@ -22,8 +19,8 @@ class AetCodeHighlight {
 	/**
 	 * 'onParserFirstCallInit' 훅의 진입점
 	 * 
-	 * 참고
-	 * https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
+	 * @param Parser $parser
+	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
 	 */
 	public static function onParserFirstCallInit( Parser $parser ){
 		// $parser->setHook( $tag, callable $callback )
@@ -35,9 +32,12 @@ class AetCodeHighlight {
 
 	/**
 	 * 
-	 * 참고
-	 * https://www.mediawiki.org/wiki/Manual:Tag_extensions
-	 * https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi/blob/master/includes/SyntaxHighlight.php
+	 * @param string $text
+	 * @param array $args
+	 * @param ?Parser $parser
+	 * @return array
+	 * @see https://www.mediawiki.org/wiki/Manual:Tag_extensions
+	 * @see https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi/blob/master/includes/SyntaxHighlight.php
 	 */
 	public static function parserHook( $text, array $args, Parser $parser, PPFrame $frame ){
 		self::debugLog('parserHook');
@@ -161,8 +161,9 @@ class AetCodeHighlight {
 
 	/**
 	 * 
-	 * 참고
-	 * https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi/blob/master/includes/SyntaxHighlight.php
+	 * @param string $text
+	 * @param array $args
+	 * @see https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi/blob/master/includes/SyntaxHighlight.php
 	 */
 	public static function processContent( $text, array $args){
 		// 앞부분 \n 값 삭제 및, 뒷 부분 공백 삭제
@@ -199,19 +200,18 @@ class AetCodeHighlight {
 		];
 	}
 
+	/**
+	 * HighlightJs 사용 여부
+	 */
 	private static function isHighlightJS($config) {
 		return $config['type'] == self::TYPE_HIGHLIGHT_JS;
 	}
 
+	/**
+	 * prismJs 사용 여부
+	 */
 	private static function isPrismJS($config){
 		return $config['type'] == self::TYPE_PRISM_JS;
-	}
-
-	/**
-	 * '사용 안 함'을 설정.
-	 */
-	private static function setDisabled(){
-		self::$_isAvailable = false;
 	}
 
 	/**
@@ -237,7 +237,7 @@ class AetCodeHighlight {
 		];
 		
 		# 설정값 병합
-		$userSettings = self::getUserLocalSettings();
+		$userSettings = self::readSettings();
 		if (isset($userSettings)){
 			if( isset($userSettings['type']) ){
 				if($userSettings['type'] != self::TYPE_HIGHLIGHT_JS && $userSettings['type'] != self::TYPE_PRISM_JS){
@@ -262,36 +262,38 @@ class AetCodeHighlight {
 	}
 
 	/**
-	 * 설정값 조회
+	 * 전역 설정값 조회
+	 * 
+	 * @return array|mixed 설정된 값 또는 undefined|null를 반환
 	 */
-	private static function getUserLocalSettings(){
+	private static function readSettings(){
 		global $wgAetCodeHighlight;
 		return $wgAetCodeHighlight;
 	}
 
 	/**
 	 * 디버그 로깅 관련
+	 * 
+	 * @param string|object $msg 디버깅 메시지 or 오브젝트
 	 */
 	private static function debugLog($msg){
 		global $wgDebugToolbar;
 
 		# 디버그툴바 사용중일 때만 허용.
-		$useDebugToolbar = $wgDebugToolbar ?? false;
-		if( !$useDebugToolbar ){
-			return false;
+		$isDebugToolbarEnabled = $wgDebugToolbar ?? false;
+		if( !$isDebugToolbarEnabled ){
+			return;
 		}
 		
 		# 로깅
-		$userSettings = self::getUserLocalSettings();
-		$isDebug = $userSettings['debug'] ?? false;
+		$settings = self::readSettings() ?? [];
+		$isDebug = $settings['debug'] ?? false;
 		if($isDebug){
 			if(is_string($msg)){
 				wfDebugLog(static::class, $msg);
 			} else {
 				wfDebugLog(static::class, json_encode($msg));
 			}
-		} else {
-			return false;
 		}
 	}
 }

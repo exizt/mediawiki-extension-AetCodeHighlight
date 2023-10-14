@@ -1,9 +1,11 @@
 # AetCodeHighlight
 
-개요
-* 미디어위키에 소스 코드 구문 강조 기능을 도와주는 확장 기능.
-* Git : hhttps://github.com/exizt/mw-ext-AetCodeHighlight
-* `highlight.js`의 CDN을 이용해서 코드 구문 강조를 구현함.
+Overview
+* Extensions to help highlight source code syntax on media wiki.
+* Git
+    - https://github.com/exizt/mw-ext-AetCodeHighlight
+    - git@github.com:exizt/mw-ext-AetCodeHighlight.git
+* using CDN of `highlight.js`/`prismjs`.
 
 
 ## Requirements
@@ -27,7 +29,12 @@ wfLoadExtension( 'AetCodeHighlight' );
 
 ## Configuration
 - `$wgAetCodeHighlight['type']`
-    - 구문 강조 기능 중 선택. 
+    - Choose from the Syntax Highlight feature.
         - value : `'highlightjs'` or `'prismjs'`
         - default : `'highlightjs'`
+
+
+
+## Usage
+using `source` tag or `scode` tag or `syntaxhighlight` tag.
 

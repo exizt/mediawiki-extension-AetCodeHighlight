@@ -11,14 +11,14 @@ use Sanitizer;
 class AetCodeHighlight {
 	# 설정값을 갖게 되는 멤버 변수
 	private static $config = null;
-	
+
 	# 상수들
 	const TYPE_PRISM_JS = 'prismjs';
 	const TYPE_HIGHLIGHT_JS = 'highlightjs';
 
 	/**
 	 * 'onParserFirstCallInit' 훅의 진입점
-	 * 
+	 *
 	 * @param Parser $parser
 	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
 	 */
@@ -31,7 +31,7 @@ class AetCodeHighlight {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param string $text
 	 * @param array $args
 	 * @param ?Parser $parser
@@ -73,7 +73,7 @@ class AetCodeHighlight {
 		}
 		$htmlAttribs['class'] = implode( ' ', $classList );
 
-		// 
+		//
 		if ( $isInline ) {
 			// Enforce inlineness. Stray newlines may result in unexpected list and paragraph processing
 			// (also known as doBlockLevels()).
@@ -107,7 +107,7 @@ class AetCodeHighlight {
 				$wrapDivClassList[] = 'mw-ext-codehighlight-highlightjs';
 			}
 			$wrapDivClass = implode(' ', $wrapDivClassList);
-			
+
 
 			$output = Html::openElement( 'div' , ['class' => $wrapDivClass]) .
 				$output .
@@ -150,7 +150,11 @@ class AetCodeHighlight {
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js" integrity="sha512-y0uGK4Ql/eJrIn2uOu2Hfc/3wnQpAHlEF58pL7akgWaVnuOJ8D5Aal/VPRKyMGADVuAavg1yVdLUpn9PlnGmYA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		<script>hljs.highlightAll();</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dos.min.js" integrity="sha512-01qE2gmXm4sOvO+4uWgyfFF4az4dGYpwDemly7IlyB6bAjoNeQhrH7RAdFujraSMuyoOPgoSB1DhbJY6P6dhFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script>
+		hljs.registerAliases(["batch"],{ languageName: "dos" })
+		hljs.highlightAll();
+		</script>
 		EOT;
 
 		return $html;
@@ -179,7 +183,7 @@ class AetCodeHighlight {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param string $text
 	 * @param array $args
 	 * @see https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi/blob/master/includes/SyntaxHighlight.php
@@ -202,11 +206,11 @@ class AetCodeHighlight {
 			$args, array_flip( [ 'style', 'class', 'id' ] )
 		);
 
-		// 
+		//
 		if ( $isInline ) {
 			// inline 형태일 때, 앞부분의 공백도 제거.
 			$output = trim( $output );
-			
+
 			// 중간의 \n도 제거.
 			$output = str_replace( "\n", ' ', $output );
 		}
@@ -242,10 +246,10 @@ class AetCodeHighlight {
 			return self::$config;
 		}
 		self::debugLog('::getConfiguration');
-		
+
 		/*
 		* 설정 기본값
-		* 
+		*
 		* type : 'highlightjs', 'prismjs'
 		* theme : 테마
 		*/
@@ -254,7 +258,7 @@ class AetCodeHighlight {
 			'lazy' => false,
 			'debug' => false
 		];
-		
+
 		# 설정값 병합
 		$userSettings = self::readSettings();
 		if (isset($userSettings)){
@@ -282,7 +286,7 @@ class AetCodeHighlight {
 
 	/**
 	 * 전역 설정값 조회
-	 * 
+	 *
 	 * @return array|mixed 설정된 값 또는 undefined|null를 반환
 	 */
 	private static function readSettings(){
@@ -292,7 +296,7 @@ class AetCodeHighlight {
 
 	/**
 	 * 디버그 로깅 관련
-	 * 
+	 *
 	 * @param string|object $msg 디버깅 메시지 or 오브젝트
 	 */
 	private static function debugLog($msg){
@@ -303,7 +307,7 @@ class AetCodeHighlight {
 		if( !$isDebugToolbarEnabled ){
 			return;
 		}
-		
+
 		# 로깅
 		$settings = self::readSettings() ?? [];
 		$isDebug = $settings['debug'] ?? false;

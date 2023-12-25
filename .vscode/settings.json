@@ -13,5 +13,15 @@
         "scode",
         "syntaxhighlight",
         "unstrip"
-    ]
+    ],
+    "liveSassCompile.settings.forceBaseDirectory": "/scss",
+    "liveSassCompile.settings.formats": [
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "/resources",
+            "savePathReplacementPairs": null
+        }
+    ],
+    "liveSassCompile.settings.generateMap": false
 }

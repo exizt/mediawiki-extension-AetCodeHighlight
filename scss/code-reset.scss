@@ -1,0 +1,24 @@
+div.mw-ext-codehighlight {
+    pre {
+        border: 0; /* resources/src/mediawiki.skinning/elements.less 보정 */
+    }
+    pre code {
+        border: 0; /* resources/src/mediawiki.skinning/elements.less 보정 */
+        /* border-radius: initial; */ /* resources/src/mediawiki.skinning/elements.less 보정 */
+        border-radius: 0.5em;
+    }
+
+    &.mw-ext-codehighlight-prismjs {
+        pre code {
+            padding: initial; /* resources/src/mediawiki.skinning/elements.less 보정 */
+            /*font-size: 16px;*/
+        }
+    }
+    &.mw-ext-codehighlight-highlightjs {
+        pre {
+            background-color: inherit; /* resources/src/mediawiki.skinning/elements.less 보정 */
+            padding: 0; /* resources/src/mediawiki.skinning/elements.less 보정 */
+            /*font-size: 16px;*/
+        }
+    }
+}

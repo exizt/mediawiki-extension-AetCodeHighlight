@@ -15,7 +15,7 @@ Overview
 
 ## cloning a repository
 ```shell
-git clone git@github.com:exizt/mw-ext-AetCodeHighlight.git AetCodeHighlight
+git clone git@github.com:exizt/mediawiki-extension-AetCodeHighlight.git AetCodeHighlight
 ```
 
 

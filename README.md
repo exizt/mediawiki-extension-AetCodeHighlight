@@ -3,7 +3,6 @@
 Overview
 * Extensions to help highlight source code syntax on media wiki.
 * Link: https://github.com/exizt/mediawiki-extension-AetCodeHighlight.git
-* Git: git@github.com:exizt/mediawiki-extension-AetCodeHighlight.git
 * using CDN of `highlight.js`/`prismjs`.
 
 

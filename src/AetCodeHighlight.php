@@ -152,6 +152,7 @@ class AetCodeHighlight {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js" integrity="sha512-y0uGK4Ql/eJrIn2uOu2Hfc/3wnQpAHlEF58pL7akgWaVnuOJ8D5Aal/VPRKyMGADVuAavg1yVdLUpn9PlnGmYA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dos.min.js" integrity="sha512-01qE2gmXm4sOvO+4uWgyfFF4az4dGYpwDemly7IlyB6bAjoNeQhrH7RAdFujraSMuyoOPgoSB1DhbJY6P6dhFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gradle.min.js" integrity="sha512-u/m2Lx3pr7txqTNmT0WIW3iomkxTYXbh4RL7c3/Eg565qEU4YSeN/gbiFQ7VEoincBS60uQoGszBUgetBT51lA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/clojure.min.js" integrity="sha512-KaEPWVghlkqO036k5Mrh5xEYznAGnzWWx7fpcWVGTsLlCtcovEXZy7wOkQQJk8JLRWR0pAOTI38os+rhQxflxg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
         hljs.registerAliases(["batch"],{ languageName: "dos" })
         hljs.highlightAll();

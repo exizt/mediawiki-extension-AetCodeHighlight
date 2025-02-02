@@ -4,9 +4,9 @@
  *
  * @file
  */
-use Html;
-use Parser;
-use Sanitizer;
+// use Html;
+// use Parser;
+// use Sanitizer;
 
 class AetCodeHighlight {
     # 설정값을 갖게 되는 멤버 변수
